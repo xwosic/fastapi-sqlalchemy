@@ -23,11 +23,6 @@ def populate_tables(session: Session):
 
 def setup_db() -> Session:
     session = Session()
-
-    # drop all tables
-    Base.metadata.drop_all(engine)
-
-    # create and populate tables
     create_tables()
     populate_tables(session)
 

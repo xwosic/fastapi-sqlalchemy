@@ -65,5 +65,5 @@ class Address(Base):  # type: ignore
 
 
 if __name__ == '__main__':
-    # we don't want to accidently overwrite db
+    # run when want to setup db
     Base.metadata.create_all(engine)
