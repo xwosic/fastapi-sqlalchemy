@@ -1,6 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from db_setup import setup_db
-from models import Session, User
+from models import User
+from dependencies import get_session
 
 app = FastAPI()
 
@@ -11,12 +12,10 @@ def setup_database():
 
 
 @app.get('/users')
-def get_all_users():
-    session = Session()
+def get_all_users(session = Depends(get_session)):
     return session.query(User).all()
 
 
 @app.get('/users/{user_id}')
-def get_user(user_id: int):
-    session = Session()
+def get_user(user_id: int, session = Depends(get_session)):
     return session.query(User).filter(User.id==user_id).one()
