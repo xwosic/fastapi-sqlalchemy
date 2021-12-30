@@ -1,7 +1,9 @@
 from fastapi import FastAPI, Depends
+from fastapi.param_functions import Query
 from db_setup import setup_db
 from models import User, Pet
 from dependencies import get_session
+from request_models import GetUsersParams
 
 app = FastAPI()
 
@@ -12,13 +14,15 @@ def setup_database():
 
 
 @app.get('/users')
-def get_all_users(session=Depends(get_session)):
-    return session.query(User).all()
-
-
-@app.get('/users/{user_id}')
-def get_user(user_id: int, session=Depends(get_session)):
-    return session.query(User).filter(User.id==user_id).all()
+def get_users(params: GetUsersParams = Depends(),
+              session=Depends(get_session)):
+    query = session.query(User)
+    print(params.dict())
+    for k, v in params.dict().items():
+        if v is not None:
+            query = query.filter(getattr(User, k)==v)
+    
+    return query.all()
 
 
 @app.get('/pets')
