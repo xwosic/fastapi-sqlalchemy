@@ -6,9 +6,9 @@ def create_tables():
 
 
 def populate_tables(session: Session):
-    users = [User(name=f'user {i}', fullname=f'fullname {i}', nickname=f'#{i}') for i in range(1, 11)]
-    pets = [Pet(name=f'pet {i}', age=i, pet_type=f'type {i}') for i in range(1, 11)]
-    addresses = [Address(email=f'email{i}@gmail.com', user_id=i) for i in range(1, 11)]
+    users = [User(id=i, name=f'user {i}', fullname=f'fullname {i}', nickname=f'#{i}') for i in range(1, 11)]
+    pets = [Pet(id=i, name=f'pet {i}', age=i, pet_type=f'type {i}') for i in range(1, 11)]
+    addresses = [Address(id=i, email=f'email{i}@gmail.com', user_id=i) for i in range(1, 11)]
     session.add_all(users)
     session.add_all(pets)
     session.add_all(addresses)
@@ -25,7 +25,7 @@ def setup_db() -> Session:
     session = Session()
 
     # drop all tables
-    Base.metadata.drop_all(engine)
+    # Base.metadata.drop_all(engine)
 
     # create and populate tables
     create_tables()
