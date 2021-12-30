@@ -1,4 +1,4 @@
-from app.models import Session
+from models import Session
 
 
 def get_session() -> Session:
