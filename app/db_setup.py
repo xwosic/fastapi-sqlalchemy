@@ -1,4 +1,4 @@
-from models import Address, Pet, Session, Base, User, engine
+from app.models import Address, Pet, Session, Base, User, engine
 
 
 def create_tables():

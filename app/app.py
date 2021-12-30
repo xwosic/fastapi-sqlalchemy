@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends
-from db_setup import setup_db
-from models import User
-from dependencies import get_session
+from app.db_setup import setup_db
+from app.models import User
+from app.dependencies import get_session
 
 app = FastAPI()
 
