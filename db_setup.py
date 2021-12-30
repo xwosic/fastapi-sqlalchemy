@@ -25,7 +25,7 @@ def setup_db() -> Session:
     session = Session()
 
     # drop all tables
-    # Base.metadata.drop_all(engine)
+    Base.metadata.drop_all(engine)
 
     # create and populate tables
     create_tables()

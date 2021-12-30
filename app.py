@@ -18,4 +18,4 @@ def get_all_users(session = Depends(get_session)):
 
 @app.get('/users/{user_id}')
 def get_user(user_id: int, session = Depends(get_session)):
-    return session.query(User).filter(User.id==user_id).one()
+    return session.query(User).filter(User.id==user_id).all()
