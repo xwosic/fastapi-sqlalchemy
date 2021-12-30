@@ -14,10 +14,11 @@ def setup_database():
 
 
 @app.get('/users')
-def get_users(params: GetUsersParams = Depends(),
-              session=Depends(get_session)):
+def get_users(params: GetUsersParams = Depends(), session=Depends(get_session)):
+    """
+    Filters users by provided params. None is ignored.
+    """
     query = session.query(User)
-    print(params.dict())
     for k, v in params.dict().items():
         if v is not None:
             query = query.filter(getattr(User, k)==v)
