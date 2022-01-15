@@ -4,7 +4,7 @@ from fastapi.param_functions import Query
 from db_setup import setup_db
 from models import User, Pet
 from dependencies import get_session
-from request_models import GetUsersParams, UpdateUserParams
+from request_models import GetUserParams, UpdateUserParams, InsertUserParams
 
 app = FastAPI()
 
@@ -16,7 +16,8 @@ def setup_database():
 
 
 @app.get('/users')
-def get_users(params: GetUsersParams = Depends(), session=Depends(get_session)):
+def get_users(params: GetUserParams = Depends(),
+              session=Depends(get_session)):
     """
     Filters users by provided params. None is ignored.
     """
@@ -38,6 +39,19 @@ def update_user(params: UpdateUserParams,
     user.name = params.name
     user.fullname = params.fullname
     user.nickname = params.nickname
+    session.commit()
+    return 200
+
+
+@app.put('/users/new')
+def new_user(params: InsertUserParams,
+             session=Depends(get_session)):
+    user = session.query(User).filter(User.id==params.id).first()
+    if user:
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail=f'User with id={params.id} already exists.')
+    
+    user = User(**params.dict())
+    session.add(user)
     session.commit()
     return 200
 
