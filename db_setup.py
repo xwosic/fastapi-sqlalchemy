@@ -21,11 +21,12 @@ def populate_tables(session: Session):
     session.commit()
 
 
-def setup_db() -> Session:
-    session = Session()
-    Base.metadata.drop_all(engine)
-    create_tables()
-    populate_tables(session)
+def setup_db(recreate=False) -> Session:
+    if recreate:
+        session = Session()
+        Base.metadata.drop_all(engine)
+        create_tables()
+        populate_tables(session)
 
 
 if __name__ == '__main__':
