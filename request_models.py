@@ -19,3 +19,14 @@ class UpdateUserParams(UserParams):
 
 class InsertUserParams(UserParams):
     pass
+
+
+class PetParams(BaseModel):
+    id: Optional[int]
+    age: Optional[int]
+    name: Optional[str]
+    pet_type: Optional[str]
+
+
+class GetPetParams(PetParams):
+    pass
