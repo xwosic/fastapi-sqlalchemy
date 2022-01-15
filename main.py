@@ -1,10 +1,10 @@
 import os
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.param_functions import Query
 from db_setup import setup_db
 from models import User, Pet
 from dependencies import get_session
-from request_models import GetUsersParams
+from request_models import GetUsersParams, UpdateUserParams
 
 app = FastAPI()
 
@@ -26,6 +26,20 @@ def get_users(params: GetUsersParams = Depends(), session=Depends(get_session)):
             query = query.filter(getattr(User, k)==v)
     
     return query.all()
+
+
+@app.put('/users')
+def update_user(params: UpdateUserParams,
+                session=Depends(get_session)):
+    user = session.query(User).filter(User.id==params.id).first()
+    if user is None:
+        raise HTTPException(status.HTTP_404_NOT_FOUND, detail=f"User with id={params.id} doesn't exist.")
+
+    user.name = params.name
+    user.fullname = params.fullname
+    user.nickname = params.nickname
+    session.commit()
+    return 200
 
 
 @app.get('/pets')
