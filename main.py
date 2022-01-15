@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI, Depends
 from fastapi.param_functions import Query
 from db_setup import setup_db
@@ -10,7 +11,8 @@ app = FastAPI()
 
 @app.on_event('startup')
 def setup_database():
-    setup_db()
+    if not os.path.exists('my_db.db'):
+        setup_db()
 
 
 @app.get('/users')
