@@ -6,6 +6,7 @@ from models import User, Pet
 from dependencies import get_session
 from request_models import GetUserParams, UpdateUserParams, InsertUserParams
 from request_models import GetPetParams
+from get import get
 
 app = FastAPI()
 
@@ -17,17 +18,11 @@ def setup_database():
 
 
 @app.get('/users')
-def get_users(params: GetUserParams = Depends(),
-              session=Depends(get_session)):
+def get_users(params: GetUserParams = Depends(), session=Depends(get_session)):
     """
     Filters users by provided params. None is ignored.
     """
-    query = session.query(User)
-    for k, v in params.dict().items():
-        if v is not None:
-            query = query.filter(getattr(User, k)==v)
-    
-    return query.all()
+    return get(User, params, session)
 
 
 @app.put('/users/update')
@@ -69,11 +64,5 @@ def new_user(params: InsertUserParams,
 
 
 @app.get('/pets')
-def get_all_pets(params: GetPetParams = Depends(),
-                 session=Depends(get_session)):
-    pet = session.query(Pet)
-    for k, v in params.dict().items():
-        if v is not None:
-            pet = pet.filter(getattr(Pet, k)==v)
-    
-    return pet.all()
+def get_all_pets(params: GetPetParams = Depends(), session=Depends(get_session)):
+    return get(Pet, params, session)
